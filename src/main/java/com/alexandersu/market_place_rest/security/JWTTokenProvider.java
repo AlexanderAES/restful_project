@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 @Log4j2
-public class JWTokenProvider {
+public class JWTTokenProvider {
 
     public String generatedToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal(); // возвращает объект, поэтому cast
