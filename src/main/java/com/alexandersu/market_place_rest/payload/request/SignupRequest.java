@@ -1,6 +1,7 @@
 package com.alexandersu.market_place_rest.payload.request;
 
-import com.alexandersu.annotations.ValidEmail;
+import com.alexandersu.market_place_rest.annotations.PasswordMatches;
+import com.alexandersu.market_place_rest.annotations.ValidEmail;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
+@PasswordMatches
 public class SignupRequest {
 
     @Email(message = "It should have email format")
