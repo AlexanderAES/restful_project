@@ -1,5 +1,6 @@
 package com.alexandersu.market_place_rest.payload.request;
 
+import com.alexandersu.annotations.ValidEmail;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -12,6 +13,7 @@ public class SignupRequest {
 
     @Email(message = "It should have email format")
     @NotBlank(message = "User email is required")
+    @ValidEmail
     private String email;
 
     @NotEmpty(message = "Please enter your phone number")
