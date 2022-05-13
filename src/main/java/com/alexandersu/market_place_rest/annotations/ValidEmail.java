@@ -1,6 +1,7 @@
 package com.alexandersu.market_place_rest.annotations;
 
-import com.alexandersu.validations.EmailValidator;
+
+import com.alexandersu.market_place_rest.validations.EmailValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

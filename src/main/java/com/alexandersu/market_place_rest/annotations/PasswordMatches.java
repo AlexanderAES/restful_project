@@ -1,6 +1,6 @@
 package com.alexandersu.market_place_rest.annotations;
 
-import com.alexandersu.validations.PasswordMatchesValidator;
+import com.alexandersu.market_place_rest.validations.PasswordMatchesValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

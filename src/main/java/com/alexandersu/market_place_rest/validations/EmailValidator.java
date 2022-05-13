@@ -1,6 +1,6 @@
-package com.alexandersu.validations;
+package com.alexandersu.market_place_rest.validations;
+import com.alexandersu.market_place_rest.annotations.ValidEmail;
 
-import com.alexandersu.annotations.ValidEmail;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
