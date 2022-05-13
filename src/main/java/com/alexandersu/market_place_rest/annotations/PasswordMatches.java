@@ -1,4 +1,4 @@
-package com.alexandersu.annotations;
+package com.alexandersu.market_place_rest.annotations;
 
 import com.alexandersu.validations.PasswordMatchesValidator;
 

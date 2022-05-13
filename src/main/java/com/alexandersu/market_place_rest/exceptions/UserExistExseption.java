@@ -1,4 +1,4 @@
-package com.alexandersu.exceptions;
+package com.alexandersu.market_place_rest.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
