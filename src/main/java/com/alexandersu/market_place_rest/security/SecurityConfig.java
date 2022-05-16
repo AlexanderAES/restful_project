@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.alexandersu.market_place_rest.security.SecurityConstants.GET_ALL_USERS;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -36,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(SecurityConstants.SIGN_UP_URLS, "/all", "/product/**")
+                .antMatchers(SecurityConstants.SIGN_UP_URLS, GET_ALL_USERS, "/all", "/product/**")
                 .permitAll()
                 .anyRequest().authenticated();
 

@@ -23,9 +23,9 @@ public class JWTTokenProvider {
 
         Map<String, Object> claimsMap = new HashMap<>(); //объект claimsMap будем передавать в json web token-е
         claimsMap.put("id", userId);
-        claimsMap.put("email", user.getEmail());
-        claimsMap.put("phoneNumber", user.getPhoneNumber());
+        claimsMap.put("username", user.getEmail());
         claimsMap.put("name", user.getName());
+        claimsMap.put("phoneNumber", user.getPhoneNumber());
 
         return Jwts.builder()
                 .setSubject(userId)

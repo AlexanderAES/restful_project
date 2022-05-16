@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
-@RequestMapping("api/users")
-@CrossOrigin
+@RequestMapping("api/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -28,7 +28,7 @@ public class UserController {
     @GetMapping("/")
     public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
         User user = userService.getCurrentUser(principal);
-        UserDTO userDTO = UserMapper.INSTANCE.toDTO(user);
+        UserDTO userDTO = UserMapper.INSTANCE.UserToUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -36,12 +36,12 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable("userId") String userId) {
         User user = userService.getUserById(Long.parseLong(userId));
-        UserDTO userDTO = UserMapper.INSTANCE.toDTO(user);
+        UserDTO userDTO = UserMapper.INSTANCE.UserToUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     // метод для изменения профиля пользователя
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseEntity<Object> updateUser(@Valid @RequestBody UserDTO userDTO,
                                              BindingResult bindingResult,
                                              Principal principal) {
@@ -50,8 +50,9 @@ public class UserController {
 
         User user = userService.updateUser(userDTO, principal);
 
-        UserDTO userUpdated = UserMapper.INSTANCE.toDTO(user);
+        UserDTO userUpdated = UserMapper.INSTANCE.UserToUserDTO(user);
         return new ResponseEntity<>(userUpdated, HttpStatus.OK);
     }
 
+    
 }

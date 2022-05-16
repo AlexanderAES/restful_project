@@ -23,10 +23,13 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, updatable = false)
     private String email;
 
-    @Column(name = "phone_number", unique = true)
+    @Column(unique = true, updatable = false)
+    private String username;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @Column(nullable = false)
@@ -51,16 +54,11 @@ public class User implements UserDetails {
     @Column(updatable = false)
     private LocalDateTime createDate;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createDate = LocalDateTime.now();
-    }
 
     public User(Long id,
                 String email,
@@ -77,18 +75,16 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getUsername() {return username;}
+
+    @PrePersist
+    protected void onCreate() {
+        this.createDate = LocalDateTime.now();
+    }
+
+    @Override
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
     }
 
     @Override

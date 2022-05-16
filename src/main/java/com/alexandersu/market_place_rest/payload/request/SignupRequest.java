@@ -18,11 +18,14 @@ public class SignupRequest {
     @ValidEmail
     private String email;
 
-    @NotEmpty(message = "Please enter your phone number")
-    private String phoneNumber;
+    @NotEmpty(message = "Please enter your username")
+    private String username;
 
     @NotEmpty(message = "Please enter your name")
     private String name;
+
+    @NotEmpty(message = "Please enter your phone number")
+    private String phoneNumber;
 
     @NotEmpty(message = "Password is required")
     @Size(min = 6)
