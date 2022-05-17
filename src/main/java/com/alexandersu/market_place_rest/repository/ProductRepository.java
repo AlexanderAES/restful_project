@@ -11,9 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
-//    List<Product> findAllByOrderByCreatedDateDesc();
-//    List<Product> findByTitleContainingIgnoreCase(String title);
-//    List<Product> findAllByUserOrderByCreatedDateDesc(User user);
-//    Optional<Product> findProductByIdAndUser(Long id, User user);
+    List<Product> findByTitleContainingIgnoreCase(String title);
+    List<Product> findAllByUserOrderByCreateDateDesc(User user);
 
 }
