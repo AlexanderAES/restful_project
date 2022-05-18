@@ -1,9 +1,9 @@
 package com.alexandersu.market_place_rest.dto;
 
-import com.alexandersu.market_place_rest.entity.User;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Data
 public class UserDTO {
@@ -14,5 +14,5 @@ public class UserDTO {
     private String name;
     private String phoneNumber;
     private String email;
-    private User user;
+    private List<ProductDTO> productsDTOList;
 }

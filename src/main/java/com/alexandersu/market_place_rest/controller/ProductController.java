@@ -3,6 +3,7 @@ package com.alexandersu.market_place_rest.controller;
 
 import com.alexandersu.market_place_rest.dto.ProductDTO;
 import com.alexandersu.market_place_rest.entity.Product;
+import com.alexandersu.market_place_rest.entity.User;
 import com.alexandersu.market_place_rest.mappers.ProductMapper;
 import com.alexandersu.market_place_rest.payload.response.MessageResponse;
 import com.alexandersu.market_place_rest.service.ProductService;
@@ -52,8 +53,9 @@ public class ProductController {
 
     // информация о продукте по его id
     @GetMapping("/info/{productId}")
-    public ResponseEntity<ProductDTO> getProductInfo(@PathVariable("productId") String productId) {
+    public ResponseEntity<ProductDTO> getProductInfo(@PathVariable("productId") String productId,Principal principal) {
         Product product = productService.getProductById(Long.parseLong(productId));
+        User user = userService.getCurrentUser(principal);
         ProductDTO productDTOInfo = ProductMapper.INSTANCE.ProductToProductDTO(product);
         return new ResponseEntity<>(productDTOInfo, HttpStatus.OK);
     }

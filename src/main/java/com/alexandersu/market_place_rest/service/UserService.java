@@ -3,13 +3,9 @@ package com.alexandersu.market_place_rest.service;
 import com.alexandersu.market_place_rest.dto.UserDTO;
 import com.alexandersu.market_place_rest.entity.User;
 import com.alexandersu.market_place_rest.entity.enums.Role;
-
-
 import com.alexandersu.market_place_rest.exceptions.UserExistException;
-import com.alexandersu.market_place_rest.mappers.UserMapper;
 import com.alexandersu.market_place_rest.payload.request.SignupRequest;
 import com.alexandersu.market_place_rest.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
