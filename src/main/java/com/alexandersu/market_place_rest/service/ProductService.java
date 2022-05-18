@@ -8,7 +8,7 @@ import com.alexandersu.market_place_rest.mappers.ProductMapper;
 import com.alexandersu.market_place_rest.repository.ProductRepository;
 import com.alexandersu.market_place_rest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Service
-@Slf4j
+@Log4j2
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
@@ -41,6 +41,7 @@ public class ProductService {
 
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
+        log.info("Delete product with id: {}", productId);
     }
 
     public Product getProductById(Long productId) {
@@ -63,6 +64,7 @@ public class ProductService {
 
     // проверка на принадлежность объявления/продукта текущему пользователю
     public static boolean isEquals(User currentUser, Product product) {
+        log.info("Сhecking for compliance of the user with email {} and the product{}", currentUser.getEmail(), product.getTitle());
         return currentUser.getEmail().equals(product.getUser().getEmail());
     }
 
@@ -72,7 +74,7 @@ public class ProductService {
                                  String productId) {
         Product currentProduct = getProductById(Long.parseLong(productId));
         User currentUser = userService.getCurrentUser(principal);
-        if (isEquals(currentUser, currentProduct)){
+        if (isEquals(currentUser, currentProduct)) {
             currentProduct = ProductMapper.INSTANCE.ProductDTOtoProduct(productDTO);
             currentProduct.setUser(currentUser);
             log.info("Update product with title {}", productDTO.getTitle());

@@ -83,6 +83,7 @@ public class UserService {
 
     public boolean сheckUserBan(String email) {
         User user = userRepository.findUserIdByEmail(email);
+        log.info("Сhecking the user's ban with id = {};", user.getId());
         return user.isActive();
     }
 

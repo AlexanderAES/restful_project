@@ -6,6 +6,7 @@ import com.alexandersu.market_place_rest.mappers.UserMapper;
 import com.alexandersu.market_place_rest.service.UserService;
 import com.alexandersu.market_place_rest.validations.ResponseErrorValidation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -18,6 +19,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("api/user")
 @RequiredArgsConstructor
+@Log4j2
 public class UserController {
 
     private final UserService userService;
@@ -28,6 +30,7 @@ public class UserController {
     public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
         User user = userService.getCurrentUser(principal);
         UserDTO userDTO = UserMapper.INSTANCE.UserToUserDTO(user);
+        log.info("Getting the current authorized user with id {} ", user.getId());
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -36,6 +39,7 @@ public class UserController {
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable("userId") String userId) {
         User user = userService.getUserById(Long.parseLong(userId));
         UserDTO userDTO = UserMapper.INSTANCE.UserToUserDTO(user);
+        log.info("Get profile user with id {} ", user.getId());
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -50,6 +54,7 @@ public class UserController {
         User user = userService.updateUser(userDTO, principal);
 
         UserDTO userUpdated = UserMapper.INSTANCE.UserToUserDTO(user);
+        log.info("Update profile user with id {} ", user.getId());
         return new ResponseEntity<>(userUpdated, HttpStatus.OK);
     }
 

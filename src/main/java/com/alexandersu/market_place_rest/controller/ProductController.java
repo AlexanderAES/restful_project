@@ -46,17 +46,16 @@ public class ProductController {
         Product product = productService.createProduct(productDTO, principal);
 
         ProductDTO createdProduct = ProductMapper.INSTANCE.ProductToProductDTO(product);
-        log.info("Save new products with name {} to database", productDTO.getTitle());
-
+        log.info("Save new product with name {} to database", productDTO.getTitle());
         return new ResponseEntity<>(createdProduct, HttpStatus.OK);
     }
 
     // информация о продукте по его id
     @GetMapping("/info/{productId}")
-    public ResponseEntity<ProductDTO> getProductInfo(@PathVariable("productId") String productId,Principal principal) {
+    public ResponseEntity<ProductDTO> getProductInfo(@PathVariable("productId") String productId) {
         Product product = productService.getProductById(Long.parseLong(productId));
-        User user = userService.getCurrentUser(principal);
         ProductDTO productDTOInfo = ProductMapper.INSTANCE.ProductToProductDTO(product);
+        log.info("Get info about product with id {}", productId);
         return new ResponseEntity<>(productDTOInfo, HttpStatus.OK);
     }
 
@@ -75,6 +74,7 @@ public class ProductController {
                 .stream()
                 .map(ProductMapper.INSTANCE::ProductToProductDTO)
                 .collect(Collectors.toList());
+        log.info("Search for a product by the word {}", title);
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
@@ -100,7 +100,7 @@ public class ProductController {
         ProductDTO productUpdated = ProductMapper.INSTANCE.ProductToProductDTO(product);
 
         if (productUpdated != null) return new ResponseEntity<>(productUpdated, HttpStatus.OK);
-
+        log.info("Update product with name {} to database", productDTO.getTitle());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("The product has not been updated");
 
     }
