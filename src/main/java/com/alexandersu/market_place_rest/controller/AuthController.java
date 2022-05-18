@@ -9,7 +9,7 @@ import com.alexandersu.market_place_rest.security.SecurityConstants;
 import com.alexandersu.market_place_rest.service.UserService;
 import com.alexandersu.market_place_rest.validations.ResponseErrorValidation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,15 +40,19 @@ public class AuthController {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-        ));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generatedToken(authentication);
+        if (userService.сheckUserBan(loginRequest.getEmail())) {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.getEmail(),
+                    loginRequest.getPassword()
+            ));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generatedToken(authentication);
 
-        return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
+            return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User baned");
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
@@ -58,4 +62,6 @@ public class AuthController {
         userService.createUser(signupRequest);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
 }
+
