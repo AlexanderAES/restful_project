@@ -23,7 +23,7 @@ public class AdminController {
 
     private final UserService userService;
 
-    @PostMapping("/ban/{userId}")
+    @PutMapping("/ban/{userId}")
     public ResponseEntity<Object> userBan(@PathVariable("userId") String userId) {
         userService.banUserById(userId);
         log.info("User activation changed with id {} ", userId);

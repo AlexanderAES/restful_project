@@ -5,11 +5,14 @@ import com.alexandersu.market_place_rest.payload.response.MessageResponse;
 import com.alexandersu.market_place_rest.repository.ImageRepository;
 import com.alexandersu.market_place_rest.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.Principal;
 
@@ -33,9 +36,13 @@ public class ImageController {
     }
 
     @GetMapping("/{productId}/image")
-    public ResponseEntity<Image> getImageFromProduct(@PathVariable("productId")String productId){
-        Image productImage = imageService.getImageFromProduct(Long.parseLong(productId));
-        return new ResponseEntity<>(productImage, HttpStatus.OK);
+    private ResponseEntity<?> getImageById(@PathVariable Long productId) {
+        Image image = imageRepository.findByProductId(productId);
+        return ResponseEntity.ok()
+                .header("fileName", image.getOriginalFileName())
+                .contentType(MediaType.valueOf(image.getContentType()))
+                .contentLength(image.getSize())
+                .body(new InputStreamResource(new ByteArrayInputStream(image.getBytes())));
     }
 }
 

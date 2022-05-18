@@ -3,10 +3,12 @@ package com.alexandersu.market_place_rest.service;
 import com.alexandersu.market_place_rest.entity.Image;
 import com.alexandersu.market_place_rest.entity.Product;
 import com.alexandersu.market_place_rest.entity.User;
+import com.alexandersu.market_place_rest.exceptions.ImageNotFoundException;
 import com.alexandersu.market_place_rest.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -53,7 +55,11 @@ public class ImageService {
         );
     }
 
-    public Image getImageFromProduct(long parseLong) {
-        return null;
-    }
+
+//    public Image getImageFromProduct(Long productId) {
+//        Image image = imageRepository.findByProductId(productId)
+//                .orElseThrow(()->new ImageNotFoundException("Cannot find image to product: "+ productId));
+//        if(!ObjectUtils.isEmpty(image)) return image;
+//
+//    }
 }

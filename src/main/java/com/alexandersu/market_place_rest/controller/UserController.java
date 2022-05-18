@@ -44,7 +44,7 @@ public class UserController {
     }
 
     // метод для изменения профиля пользователя
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<Object> updateUser(@Valid @RequestBody UserDTO userDTO,
                                              BindingResult bindingResult,
                                              Principal principal) {

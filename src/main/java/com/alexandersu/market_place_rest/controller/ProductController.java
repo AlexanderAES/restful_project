@@ -59,6 +59,17 @@ public class ProductController {
         return new ResponseEntity<>(productDTOInfo, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        List<ProductDTO> productDTOList = productService.getAllProduct()
+                .stream()
+                .map(ProductMapper.INSTANCE::ProductToProductDTO)
+                .collect(Collectors.toList());
+        log.info("Get get all products");
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+    }
+
+
     // удаление продукта по его id
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("productId") String productId) {
