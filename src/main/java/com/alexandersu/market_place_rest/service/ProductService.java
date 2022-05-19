@@ -39,11 +39,6 @@ public class ProductService {
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found with username " + username));
     }
 
-    public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
-        log.info("Delete product with id: {}", productId);
-    }
-
     public Product getProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
     }
@@ -61,20 +56,11 @@ public class ProductService {
         return productRepository.findAllByUserOrderByCreateDateDesc(user);
     }
 
+    public Product updateProduct(ProductDTO productDTO,Principal principal,String productId) {
 
-    // проверка на принадлежность объявления/продукта текущему пользователю
-    public static boolean isEquals(User currentUser, Product product) {
-        log.info("Сhecking for compliance of the user with email {} and the product{}", currentUser.getEmail(), product.getTitle());
-        return currentUser.getEmail().equals(product.getUser().getEmail());
-    }
-
-
-    public Product updateProduct(ProductDTO productDTO,
-                                 Principal principal,
-                                 String productId) {
         Product currentProduct = getProductById(Long.parseLong(productId));
         User currentUser = userService.getCurrentUser(principal);
-        if (isEquals(currentUser, currentProduct)) {
+        if (isEquals(principal, currentProduct)) {
             currentProduct = ProductMapper.INSTANCE.ProductDTOtoProduct(productDTO);
             currentProduct.setUser(currentUser);
             log.info("Update product with title {}", productDTO.getTitle());
@@ -83,8 +69,26 @@ public class ProductService {
         return null;
     }
 
+    public boolean deleteProduct(Principal principal,Long productId) {
+        Product currentProduct = getProductById(productId);
+        if (isEquals(principal, currentProduct)){
+            productRepository.deleteById(productId);
+            log.info("Delete product with id: {}", productId);
+        }
+        log.error("wrong delete product: {}", productId);
+        return false;
+    }
+
     public List<Product> getAllProduct() {
         return productRepository.findAll();
     }
+
+    // проверка на принадлежность объявления/продукта текущему пользователю
+    public boolean isEquals(Principal principal, Product product) {
+        User currentUser = userService.getCurrentUser(principal);
+        return currentUser.getEmail().equals(product.getUser().getEmail());
+    }
+
 }
+
 

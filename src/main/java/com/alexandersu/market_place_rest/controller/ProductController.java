@@ -6,7 +6,6 @@ import com.alexandersu.market_place_rest.entity.Product;
 import com.alexandersu.market_place_rest.mappers.ProductMapper;
 import com.alexandersu.market_place_rest.payload.response.MessageResponse;
 import com.alexandersu.market_place_rest.service.ProductService;
-import com.alexandersu.market_place_rest.service.UserService;
 import com.alexandersu.market_place_rest.validations.ResponseErrorValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +31,6 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     private final ProductService productService;
-    private final UserService userService;
     private final ResponseErrorValidation responseErrorValidation;
 
     @PostMapping("/create")
@@ -73,10 +71,11 @@ public class ProductController {
 
     @DeleteMapping("/delete/{productId}")
     @Operation(summary = "удаление объявления", description = "удаление продукта/услуги")
-    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("productId") String productId) {
-        productService.deleteProduct(Long.parseLong(productId));
+    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("productId") String productId,Principal principal) {
         log.info("Delete product with id {}", productId);
-        return new ResponseEntity<>(new MessageResponse("Product was deleted"), HttpStatus.OK);
+        return (productService.deleteProduct(principal,Long.parseLong(productId))) ?
+                new ResponseEntity<>(new MessageResponse("Product was deleted"), HttpStatus.OK):
+                new ResponseEntity<>(new MessageResponse("Product was not deleted"), HttpStatus.FORBIDDEN);
     }
 
     @GetMapping("/search/{title}")
