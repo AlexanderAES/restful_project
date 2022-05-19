@@ -1,5 +1,6 @@
 package com.alexandersu.market_place_rest.controller;
 
+
 import com.alexandersu.market_place_rest.payload.request.LoginRequest;
 import com.alexandersu.market_place_rest.payload.request.SignupRequest;
 import com.alexandersu.market_place_rest.payload.response.JWTTokenSuccessResponse;
@@ -40,7 +41,7 @@ public class AuthController {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
 
-        if (userService.сheckUserBan(loginRequest.getEmail())) {
+        if (userService.сheckUserEnableDisable(loginRequest.getEmail())) {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginRequest.getEmail(),
                     loginRequest.getPassword()
@@ -50,7 +51,7 @@ public class AuthController {
 
             return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User baned");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User baned!");
     }
 
 

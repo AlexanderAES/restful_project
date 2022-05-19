@@ -22,15 +22,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(username)
-                .orElseThrow(()->new UsernameNotFoundException("Username not found with username: + " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found with username: + " + username));
         return build(user);
     }
 
-    public User loadUserById(Long id){
+    public User loadUserById(Long id) {
         return userRepository.findUserById(id).orElse(null);
     }
 
-    public User build(User user){
+    public User build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());

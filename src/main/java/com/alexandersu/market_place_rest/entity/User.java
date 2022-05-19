@@ -26,6 +26,9 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true, updatable = false)
     private String email;
 
+    @Column(name = "activation_code")
+    private String activationCode;
+
     @Column(unique = true, updatable = false)
     private String username;
 
@@ -56,6 +59,10 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
+
+    public boolean isActive() {
+        return active;
+    }
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;

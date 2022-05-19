@@ -2,7 +2,6 @@ package com.alexandersu.market_place_rest.security;
 
 public class SecurityConstants {
     public static final String SIGN_UP_URLS = "/api/auth/*";
-    public static final String GET_ALL_USERS = "/api/users/*";
     public static final String GET_ALL_PRODUCTS = "api/product/all";
     public static final String SECRET = "SecretKeyGenJWT";
     public static final String TOKEN_PREFIX = "Bearer ";

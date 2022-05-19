@@ -12,9 +12,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Log4j2
@@ -23,6 +25,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService mailSender;
+
 
     public User createUser(SignupRequest userIn) {
         User user = new User();
@@ -31,16 +35,43 @@ public class UserService {
         user.setName(userIn.getName());
         user.setPhoneNumber(userIn.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(userIn.getPassword()));
-        user.getRoles().add(Role.ROLE_ADMIN);
-        user.setActive(true);
+        user.getRoles().add(Role.ROLE_USER);
+        user.setActivationCode(UUID.randomUUID().toString());
+        sendMessage(user);
+        log.info("Send message to email {}", userIn.getEmail());
 
         try {
             log.info("Saving user {}", userIn.getEmail());
+
             return userRepository.save(user);
         } catch (Exception e) {
             log.error("Error during registration. {}", e.getMessage());
             throw new UserExistException("The user " + user.getUsername() + " already exist. Please check credentials");
         }
+    }
+
+
+    private void sendMessage(User user) {
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to Market place. Please, visit next link: http://localhost:8082/api/confirm/activate/%s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
+            mailSender.send(user.getEmail(), "Activation code", message);
+        }
+    }
+
+    public boolean activateUser(String code) {
+        User user = userRepository.findUserByActivationCode(code);
+        if (user == null) {
+            return false;
+        }
+        user.setActivationCode(null);
+        user.setActive(true);
+        userRepository.save(user);
+        return true;
     }
 
     public User updateUser(UserDTO userDTO, Principal principal) {
@@ -81,11 +112,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean сheckUserBan(String email) {
+    public boolean сheckUserEnableDisable(String email) {
         User user = userRepository.findUserIdByEmail(email);
         log.info("Сhecking the user's ban with id = {};", user.getId());
         return user.isActive();
     }
+
 
     public List<User> getListUsers() {
         return userRepository.findAll();

@@ -6,7 +6,6 @@ import com.alexandersu.market_place_rest.repository.ImageRepository;
 import com.alexandersu.market_place_rest.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
