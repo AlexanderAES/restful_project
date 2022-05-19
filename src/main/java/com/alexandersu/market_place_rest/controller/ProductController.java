@@ -8,6 +8,8 @@ import com.alexandersu.market_place_rest.payload.response.MessageResponse;
 import com.alexandersu.market_place_rest.service.ProductService;
 import com.alexandersu.market_place_rest.service.UserService;
 import com.alexandersu.market_place_rest.validations.ResponseErrorValidation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -22,19 +24,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/product")
+@RequestMapping("api/v1/products")
 @CrossOrigin
 @RequiredArgsConstructor
 @Log4j2
+@Tag(name = "Products", description = "контроллер для работы с объявлениями")
 public class ProductController {
 
     private final ProductService productService;
     private final UserService userService;
     private final ResponseErrorValidation responseErrorValidation;
 
-
-    // создание продукта
     @PostMapping("/create")
+    @Operation(summary = "создание объявления", description = "позволяет создать объявление о продукте или услуге")
     public ResponseEntity<Object> createProduct(@Valid @RequestBody
                                                         ProductDTO productDTO,
                                                 BindingResult bindingResult,
@@ -49,8 +51,8 @@ public class ProductController {
         return new ResponseEntity<>(createdProduct, HttpStatus.OK);
     }
 
-    // информация о продукте по его id
     @GetMapping("/info/{productId}")
+    @Operation(summary = "информация о продукте", description = "получение информации о продукте или услуге")
     public ResponseEntity<ProductDTO> getProductInfo(@PathVariable("productId") String productId) {
         Product product = productService.getProductById(Long.parseLong(productId));
         ProductDTO productDTOInfo = ProductMapper.INSTANCE.ProductToProductDTO(product);
@@ -58,8 +60,8 @@ public class ProductController {
         return new ResponseEntity<>(productDTOInfo, HttpStatus.OK);
     }
 
-    // список всех продуктов всех пользователей
     @GetMapping("/all")
+    @Operation(summary = "все объявления", description = "позволяет получить список всех объявлений")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         List<ProductDTO> productDTOList = productService.getAllProduct()
                 .stream()
@@ -69,17 +71,16 @@ public class ProductController {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
-
-    // удаление продукта по его id
     @DeleteMapping("/delete/{productId}")
+    @Operation(summary = "удаление объявления", description = "удаление продукта/услуги")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("productId") String productId) {
         productService.deleteProduct(Long.parseLong(productId));
         log.info("Delete product with id {}", productId);
         return new ResponseEntity<>(new MessageResponse("Product was deleted"), HttpStatus.OK);
     }
 
-    // поиск продукта по ключевому слову
     @GetMapping("/search/{title}")
+    @Operation(summary = "поиск по заголовку", description = "получение списка всех объявлений по ключевому слову")
     public ResponseEntity<List<ProductDTO>> getListProduct(@PathVariable("title") String title) {
         List<ProductDTO> productDTOList = productService.getListProducts(title)
                 .stream()
@@ -89,8 +90,9 @@ public class ProductController {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
-    // список всех продуктов пользователя
     @GetMapping("/user/products")
+    @Operation(summary = "Получение списка всех объявлений пользователя",
+            description = "получение списка всех продуктов или услуг предлагаемых пользователем")
     public ResponseEntity<List<ProductDTO>> getAllProductsForUser(Principal principal) {
         List<ProductDTO> productDTOList = productService.getAllProductFromUser(principal)
                 .stream()
@@ -99,8 +101,8 @@ public class ProductController {
         return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 
-    // редактирование объявления поьзователем при условии что это его объявление
     @PutMapping("/update/{productId}")
+    @Operation(summary = "обновление объявления", description = "обновление объявления")
     public ResponseEntity<Object> updateProduct(@PathVariable("productId") String productId, @Valid @RequestBody
             ProductDTO productDTO, BindingResult bindingResult, Principal principal) {
 

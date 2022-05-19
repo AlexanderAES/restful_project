@@ -5,6 +5,8 @@ import com.alexandersu.market_place_rest.entity.User;
 import com.alexandersu.market_place_rest.mappers.UserMapper;
 import com.alexandersu.market_place_rest.service.UserService;
 import com.alexandersu.market_place_rest.validations.ResponseErrorValidation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -17,16 +19,17 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/v1/users")
 @RequiredArgsConstructor
 @Log4j2
+@Tag(name = "Users", description = "контроллер для работы с пользователями")
 public class UserController {
 
     private final UserService userService;
     private final ResponseErrorValidation responseErrorValidation;
 
-    // метод возвращает пользователя который находится авторизированным в системе
-    @GetMapping("/")
+        @GetMapping("/")
+    @Operation(summary = "получение пользователя", description = "Позволяет получить пользователя который авторизован в системе")
     public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
         User user = userService.getCurrentUser(principal);
         UserDTO userDTO = UserMapper.INSTANCE.UserToUserDTO(user);
@@ -34,8 +37,8 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    // метод возвращает пользователя по его id
     @GetMapping("/{userId}")
+    @Operation(summary = "информация о пользователе", description = "позволяет получить профайл пользователя")
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable("userId") String userId) {
         User user = userService.getUserById(Long.parseLong(userId));
         UserDTO userDTO = UserMapper.INSTANCE.UserToUserDTO(user);
@@ -43,8 +46,8 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    // метод для изменения профиля пользователя
     @PutMapping("/update")
+    @Operation(summary = "изменение профиля пользователя", description = "позволяет изменить информацию в профиле пользователя")
     public ResponseEntity<Object> updateUser(@Valid @RequestBody UserDTO userDTO,
                                              BindingResult bindingResult,
                                              Principal principal) {

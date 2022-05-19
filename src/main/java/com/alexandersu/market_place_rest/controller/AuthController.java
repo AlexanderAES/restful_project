@@ -9,6 +9,8 @@ import com.alexandersu.market_place_rest.security.JWTTokenProvider;
 import com.alexandersu.market_place_rest.security.SecurityConstants;
 import com.alexandersu.market_place_rest.service.UserService;
 import com.alexandersu.market_place_rest.validations.ResponseErrorValidation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,10 @@ import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @PreAuthorize("permitAll()")
 @RequiredArgsConstructor
+@Tag(name = "Authorization", description = "контроллер для авторизации и регистрации пользователей")
 public class AuthController {
 
     private final JWTTokenProvider jwtTokenProvider;
@@ -35,8 +38,8 @@ public class AuthController {
     private final ResponseErrorValidation responseErrorValidation;
     private final UserService userService;
 
-
     @PostMapping("/signin")
+    @Operation(summary = "вход пользователя в приложение", description = "Позволяет авторизовать пользователя в приложении")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
@@ -54,8 +57,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User baned!");
     }
 
-
     @PostMapping("/signup")
+    @Operation(summary = "регистрация пользователя", description = "Позволяет зарегистрировать пользователя")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;

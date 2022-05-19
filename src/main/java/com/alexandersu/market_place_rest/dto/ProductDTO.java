@@ -1,8 +1,9 @@
 package com.alexandersu.market_place_rest.dto;
 
-import com.alexandersu.market_place_rest.entity.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+@Schema(description = "Сущность объявления")
 @Data
 public class ProductDTO {
     private Long id;
