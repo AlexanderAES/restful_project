@@ -55,11 +55,4 @@ public class ImageService {
         );
     }
 
-
-//    public Image getImageFromProduct(Long productId) {
-//        Image image = imageRepository.findByProductId(productId)
-//                .orElseThrow(()->new ImageNotFoundException("Cannot find image to product: "+ productId));
-//        if(!ObjectUtils.isEmpty(image)) return image;
-//
-//    }
 }
