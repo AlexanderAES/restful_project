@@ -55,7 +55,7 @@ public class UserService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Market place. Please, visit next link: http://localhost:8082/api/confirm/activate/%s",
+                            "Welcome to Market place. Please, visit next link: http://localhost:8082/api/v1/confirm/activate/%s",
                     user.getUsername(),
                     user.getActivationCode()
             );
