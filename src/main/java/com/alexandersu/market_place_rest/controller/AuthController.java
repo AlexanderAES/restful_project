@@ -54,7 +54,7 @@ public class AuthController {
 
             return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User baned!");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User baned, or did not confirm the registration");
     }
 
     @PostMapping("/signup")

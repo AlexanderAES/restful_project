@@ -95,7 +95,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findUserById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public void banUserById(String userId) {

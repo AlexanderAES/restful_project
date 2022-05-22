@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/v1/admin")
 @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-@CrossOrigin
 @RequiredArgsConstructor
 @Log4j2
 @Tag(name = "Admin", description = "контроллер для пользователей с правами администратора")
@@ -27,7 +26,8 @@ public class AdminController {
     private final UserService userService;
 
     @PutMapping("/ban/{userId}")
-    @Operation(summary = "блокировка/разблокировка пользователя", description = "Позволяет блокировать доступ пользователей к ресурсу и также разрешать")
+    @Operation(summary = "блокировка/разблокировка пользователя",
+            description = "Позволяет блокировать доступ пользователей к ресурсу и также разрешать")
     public ResponseEntity<Object> userBan(@PathVariable("userId") String userId) {
         userService.banUserById(userId);
         log.info("User activation changed with id {} ", userId);
@@ -35,7 +35,8 @@ public class AdminController {
     }
 
     @GetMapping("/all/users")
-    @Operation(summary = "получение всех списков пользователей", description = "Позволяет получить список всех зарегистрированных пользователей")
+    @Operation(summary = "получение всех списков пользователей",
+            description = "Позволяет получить список всех зарегистрированных пользователей")
     public ResponseEntity<List<UserDTO>> getListUsers() {
         List<UserDTO> userDTOList = userService.getListUsers()
                 .stream()

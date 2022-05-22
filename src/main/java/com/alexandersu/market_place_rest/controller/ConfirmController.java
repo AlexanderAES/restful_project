@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/confirm")
 @RequiredArgsConstructor
-@Tag(name = "Confirmation registration", description = "контроллер для подтверждения регистрации пользователей через email.")
+@Tag(name = "Confirmation registration",
+        description = "контроллер для подтверждения регистрации пользователей через email.")
 public class ConfirmController {
 
     private final UserService userService;
@@ -25,6 +26,5 @@ public class ConfirmController {
         userService.activateUser(token);
         return new ResponseEntity<>(new MessageResponse("User was activate"), HttpStatus.OK);
     }
-
 
 }

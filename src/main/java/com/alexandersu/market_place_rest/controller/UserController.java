@@ -29,7 +29,8 @@ public class UserController {
     private final ResponseErrorValidation responseErrorValidation;
 
         @GetMapping("/")
-    @Operation(summary = "получение пользователя", description = "Позволяет получить пользователя который авторизован в системе")
+    @Operation(summary = "получение пользователя",
+            description = "Позволяет получить пользователя который авторизован в системе")
     public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
         User user = userService.getCurrentUser(principal);
         UserDTO userDTO = UserMapper.INSTANCE.UserToUserDTO(user);
@@ -47,7 +48,8 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    @Operation(summary = "изменение профиля пользователя", description = "позволяет изменить информацию в профиле пользователя")
+    @Operation(summary = "изменение профиля пользователя",
+            description = "позволяет изменить информацию в профиле пользователя")
     public ResponseEntity<Object> updateUser(@Valid @RequestBody UserDTO userDTO,
                                              BindingResult bindingResult,
                                              Principal principal) {
