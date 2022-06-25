@@ -1,8 +1,7 @@
 package com.alexandersu.market_place_rest.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,7 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "product")
+@Builder
 @Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
@@ -54,4 +55,11 @@ public class Product {
         createDate = LocalDateTime.now();
     }
 
+    public Product(Long id, String title, String description, int price, String city) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.city = city;
+    }
 }

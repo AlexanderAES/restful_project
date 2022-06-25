@@ -3,6 +3,7 @@ package com.alexandersu.market_place_rest.entity;
 import com.alexandersu.market_place_rest.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -57,7 +59,7 @@ public class User implements UserDetails {
     @Column(updatable = false)
     private LocalDateTime createDate;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
     public boolean isActive() {
@@ -79,6 +81,14 @@ public class User implements UserDetails {
         this.name = name;
         this.password = password;
         this.authorities = authorities;
+    }
+
+    public User(Long id, String email, String username, String phoneNumber, String name) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.name = name;
     }
 
     @Override

@@ -41,9 +41,7 @@ public class ProductController {
                                                 Principal principal) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
-
         Product product = productService.createProduct(productDTO, principal);
-
         ProductDTO createdProduct = ProductMapper.INSTANCE.ProductToProductDTO(product);
         log.info("Save new product with name {} to database", productDTO.getTitle());
         return new ResponseEntity<>(createdProduct, HttpStatus.OK);
@@ -71,10 +69,10 @@ public class ProductController {
 
     @DeleteMapping("/delete/{productId}")
     @Operation(summary = "удаление объявления", description = "удаление продукта/услуги")
-    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("productId") String productId,Principal principal) {
+    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("productId") String productId, Principal principal) {
         log.info("Delete product with id {}", productId);
-        return (productService.deleteProduct(principal,Long.parseLong(productId))) ?
-                new ResponseEntity<>(new MessageResponse("Product was deleted"), HttpStatus.OK):
+        return (productService.deleteProduct(principal, Long.parseLong(productId))) ?
+                new ResponseEntity<>(new MessageResponse("Product was deleted"), HttpStatus.OK) :
                 new ResponseEntity<>(new MessageResponse("Product was not deleted"), HttpStatus.FORBIDDEN);
     }
 
